@@ -1,0 +1,77 @@
+/* I-reset ang basic margins para pantay-pantay */
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+/* Katumbas ng: bg-gray-100 h-screen flex flex-col */
+.dashboard-body {
+    background-color: #f3f4f6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+/* Katumbas ng: bg-blue-700 text-white p-4 shadow-md flex justify-between items-center */
+.dashboard-header {
+    background-color: #1d4ed8;
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-header h1 {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+/* Katumbas ng: flex items-center gap-4 */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Katumbas ng lumang inline styles ng clock at welcome text */
+.clock-text {
+    font-size: 14px;
+    font-weight: normal;
+    color: white;
+}
+
+.welcome-text {
+    font-weight: normal;
+}
+
+/* Katumbas ng: p-8 */
+.dashboard-main {
+    padding: 2rem;
+}
+
+/* Katumbas ng: text-2xl font-bold mb-4 text-gray-800 */
+.dashboard-main h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+/* Katumbas ng: bg-white p-6 rounded-lg shadow-sm border-t-4 border-blue-700 */
+.dashboard-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border-top: 4px solid #1d4ed8;
+}
+
+.dashboard-card p {
+    margin: 0;
+    color: #333;
+}
