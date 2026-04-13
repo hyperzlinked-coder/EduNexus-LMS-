@@ -124,3 +124,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Burahin ang session kapag isinara ang browser tab/window
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Opsyonal: I-set kung gaano katagal bago mag-expire ang session (sa segundo)
+# Halimbawa: 3600 seconds = 1 hour
+SESSION_COOKIE_AGE = 3600 
+
+# Para siguradong ma-update ang session sa bawat request
+SESSION_SAVE_EVERY_REQUEST = True

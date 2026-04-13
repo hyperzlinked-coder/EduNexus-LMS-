@@ -103,6 +103,7 @@
 .user-info {
     display: flex;
     flex-direction: column;
+    align-items: flex-end; /* Dinagdag natin ito para pumantay sa kanan ang text */
     line-height: 1.2;
 }
 

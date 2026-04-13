@@ -5,11 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduNexus [LMS]</title>
-
-    <link rel="icon" type="image/png" href="{% static 'img/bg.logo.png'%}"?v=2>
-
+    <link rel="icon" type="image/png" href="{% static 'img/bg.logo.png' %}?v=2">
     <link rel="stylesheet" href="{% static 'css/loginstyle.css' %}">
-
 </head>
 <body>
     
@@ -21,6 +18,15 @@
         <div class="login-card">
             <div class="school-header-text">SIGN-IN</div>
             
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="padding: 10px; margin-bottom: 15px; border-radius: 4px; font-size: 0.85rem; text-align: center;
+                        {% if message.tags == 'error' %} color: #a94442; background-color: #f2dede; border: 1px solid #ebccd1; {% else %} color: #3c763d; background-color: #dff0d8; border: 1px solid #d6e9c6; {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
