@@ -75,3 +75,46 @@
     margin: 0;
     color: #333;
 }
+
+/* --- BAGONG USER PROFILE STYLES --- */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem; /* Nilakihan natin ang gap para humiwalay ang oras sa profile */
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Hugis bilog na profile picture */
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Lalagyan ng Name at Role (pababa) */
+.user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 1rem;
+    color: white;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: #cbd5e1; /* Light gray na kulay para sa role */
+    text-transform: uppercase; /* Para palaging naka-CAPITAL LETTERS ang role */
+    letter-spacing: 1px;
+}

@@ -14,8 +14,15 @@
         <h1>Makiling School | TEACHER PORTAL</h1>
         
         <div class="header-right">
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=random&color=fff" alt="Profile" class="avatar">
+                <div class="user-info">
+                    <span class="user-name">{{ request.user.username }}</span>
+                    <span class="user-role">INSTRUCTOR</span>
+                </div>
+            </div>
+
             <div id="real-time-clock" class="clock-text"></div>
-            <span class="welcome-text">Welcome, Instructor {{ request.user.username }}!</span>
         </div>
     </header>
 
