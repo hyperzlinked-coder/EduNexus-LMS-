@@ -1,0 +1,156 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <style>
+        .student-photo{
+            width: 35px;
+            height: 35px;
+            border-radius: 60%;
+            object-fit: cover;
+        }
+    </style>    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="pagetitle">
+        <h1>Student Directory</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item active"><a href="#">Student List</a></li>
+            </ol>
+        </nav>
+    </div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-1"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Registered Student</h5>
+                        
+                        <a href="{% url 'account:student_create'  %}" class="btn btn-primary mb-3">
+                            <i class="fa fa-user-plus"></i> Add new Student
+                        </a>
+
+                        <table class="table table-striped align-middle">
+                            <thead> 
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Academic level</th>
+                                    <th>Age</th>
+                                    <th>Enrollment</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if student.photo %}
+                                                <img src="{{ student.photo.url }}" alt="{{ student }}" class="student-photo"/>
+                                            {% else %}
+                                                <img src="{% static 'img/student-img.jpg' %}" alt="Default Profile" class="student-photo"/>
+                                            {% endif %}
+
+                                            <div class="ms-3">
+                                                <h6 class="mb-0">
+                                                    {{ student.first_name }} {{ student.last_name }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        
+                                    </td>
+                                    <td>{{ student.get_gender_display }}</td>
+                                    <td>{{ student.get_current_academic_level_display }}</td>
+                                    <td>{{ student.get_age }}</td>
+                                    <td>
+                                        {% if student.get_enrollment_status_display == 'Active' %}
+                                            <span class="badge bg-success">{{ student.get_enrollment_status_display }}</span>
+                                        {% elif student.get_enrollment_status_display == 'Graduated' %}
+                                            <span class="badge bg-warning text-dark">{{ student.get_enrollment_status_display }}</span>
+                                        {% elif student.get_enrollment_status_display == 'Dismissed' %}
+                                            <span class="badge bg-danger">{{ student.get_enrollment_status_display }}</span>
+                                        {% elif student.get_enrollment_status_display == 'Transferred' %}
+                                            <span class="badge bg-secondary">{{ student.get_enrollment_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'account:student_profile' student.pk  %}" class="btn btn-sm btn-primary me-1">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                        <a href="{% url 'account:student_edit' student.pk  %}" class="btn btn-sm btn-warning me-1">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-danger me-1" data-bs-toggle="modal" data-bs-target="#deleteStudent{{ student.pk }}">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">
+                                        No Student Found
+                                    </td>
+                                </tr>
+                                {% endfor %} 
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% for student in students %}
+<div class="modal fade" tabindex="-1" id="deleteStudent{{ student.pk }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+            <i class="bi bi-exclamation-triangle-fill text-warning fs-1"></i>    
+                <p>Are you sure you want to delete {{ student }}?.</p>    
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+        <form action="{% url 'account:student_delete' student.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete Student</button>
+        </form> 
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'js/dashboard-utils.js' %}"></script>
+{% endblock %}

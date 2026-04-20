@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>EduNexus</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicon -->
+  <link rel="icon" href="{% static 'img/bg.logo.png' %}">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+ 
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/fontawesome-free/bootstrap/css/all.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/remixicons/remixicons.css' %}" rel="stylesheet">
+
+<!-- CSS for CropperJS, SweetAlert2, MagnifiPopup -->
+<link href="{% static 'vendor/cropperjs/dist/cropper.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/sweetalert2/dist/sweetalert2.min.css' %}" rel="stylesheet">
+<link href="{% static 'vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+
+  <!-- Templates main  CSS File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet"> 
+
+  <!-- Page-specific extra css -->
+  {% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+
+  {% include 'includes/header.html' %}
+
+  {% include 'includes/sidebar.html' %}
+
+  <main id="main" class="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'includes/footer.html' %}
+
+  <!-- Load Jquery First -->
+  <script src="{% static 'vendor/js/jquery/dist/jquery.min.js' %}"></script>
+
+  <!-- Vendor JS File -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/quill/quill.js' %}"></script>
+  <script src="{% static 'vendor/tinymce/tinymce.min.js' %}"></script>
+
+  <!-- Scripts for CropperJS, SweetAlert2, MagnifiPopup -->
+  <script src="{% static 'vendor/cropperjs/dist/cropper.min.js' %}"></script>
+  <script src="{% static 'vendor/sweetalert2/dist/sweetalert2.all.min.css' %}"></script>
+  <script src="{% static 'vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+
+  <!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Templates main  JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- Templates navigator JS File -->
+  <script src="{% static 'js/sidebar-nav.js' %}"></script>
+
+  <!-- Page-specific extra scripts -->
+  {% block extra_scripts %}{% endblock %}
+
+</body>
+
+</html>

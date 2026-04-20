@@ -33,42 +33,7 @@
         </div>
     </main>
 
-    <script>
-        let timeoutTimer;
-
-        function resetTimer() {
-            clearTimeout(timeoutTimer);
-            timeoutTimer = setTimeout(() => {
-                window.location.href = "{% url 'logout' %}";
-            }, 60000); 
-        }
-
-        window.onload = resetTimer;
-        document.onmousemove = resetTimer; 
-        document.onkeypress = resetTimer;  
-        document.onclick = resetTimer;     
-        document.onscroll = resetTimer;    
-    </script>
-
-    <script>
-        function updateLiveClock() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric', 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-            };
-            let timeString = now.toLocaleDateString('en-US', options);
-            timeString = timeString.replace(',', ' |');
-            document.getElementById('real-time-clock').textContent = timeString;
-        }
-
-        updateLiveClock();
-        setInterval(updateLiveClock, 1000);
-    </script>
+    
 </body>
+    <script src="{% static 'js/dashboard-utils.js' %}"></script>
 </html>
