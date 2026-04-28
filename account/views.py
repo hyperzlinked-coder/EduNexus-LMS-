@@ -18,11 +18,9 @@ def login_view(request):
             user = authenticate(request, username=username_provided, password=password_provided)
             
             if user is not None:
-                # CRITICAL: Check if the casing matches exactly
                 if user.username == username_provided:
                     login(request, user)
                     
-                    # Your existing redirect logic
                     if user.is_superuser:
                         return redirect('account:admin_dashboard')
                     elif user.groups.filter(name='Teacher').exists() or user.is_staff:
@@ -30,7 +28,6 @@ def login_view(request):
                     else:
                         return redirect('account:student_dashboard')
                 else:
-                    # If casing is wrong (e.g., 'admin' vs 'Admin')
                     messages.error(request, "Invalid username or password (check your capitalization).")
             else:
                 messages.error(request, "Invalid username or password.")
@@ -38,35 +35,78 @@ def login_view(request):
         form = SchoolLoginForm()
     return render(request, 'account/login.html', {'form': form})
 
-def logout_user(request):
+@never_cache
+def logout_view(request):
     logout(request)
+    messages.success(request, "You have been logged out successfully.")
     return redirect('account:login')
 
 # --- DASHBOARDS ---
+
 @login_required
+@never_cache
 def admin_dashboard_view(request):
     return render(request, 'account/admin_dashboard.html')
 
 @login_required
+@never_cache
 def teacher_dashboard_view(request):
     return render(request, 'account/teacher_dashboard.html')
 
 @login_required
+@never_cache
 def student_dashboard_view(request):
     return render(request, 'account/student_dashboard.html')
 
-# --- STUDENT CRUD ---
-
+# --- USER SELF-PROFILE ---
 @login_required
+@never_cache
+def user_profile_view(request):
+    # This works for ALL users (Admin, Teacher, Student)
+    profile = request.user.profile 
+    
+    # Optional: Check if they also have student records
+    student = Student.objects.filter(
+        first_name=request.user.first_name, 
+        last_name=request.user.last_name
+    ).first()
+
+    return render(request, "includes/user_profile.html", {
+        'profile': profile,
+    })
+       
+@login_required
+@never_cache
+def update_profile_info(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        # Use .get('field', '') to provide an empty string instead of None
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.email = request.POST.get('email', user.email) # Keep old email if new one is empty
+        user.save()
+
+        profile = user.profile
+        profile.phone_number = request.POST.get('phone', '')
+        profile.address = request.POST.get('address', '') # This now maps to the input above
+        profile.save()
+
+        messages.success(request, "Account information updated!")
+        return redirect('account:my_profile')
+
+
+# --- STUDENT CRUD (For Admin/Teacher use) ---
+@login_required
+@never_cache
 def student_list(request):
     students = Student.objects.all()
-    # CHANGE: Removed 'account/' prefix because 'includes' is directly in 'templates'
     return render(request, 'includes/list.html', {'students': students})
 
 @login_required
 def student_create(request):
+    
     if request.method == "POST":
-        # Pass request.FILES to handle the student photo upload
         form = StudentForm(request.POST, request.FILES) 
         if form.is_valid():
             student = form.save()
@@ -81,10 +121,10 @@ def student_create(request):
     })
     
 @login_required
+@never_cache
 def student_profile(request, pk):
     student = get_object_or_404(Student, pk=pk)
-    # CHANGE: Removed 'account/' prefix
-    return render(request, "includes/profile.html", {'student': student})
+    return render(request, "includes/student_profile.html", {'student': student})
 
 @login_required
 def student_edit(request, pk):
@@ -103,7 +143,6 @@ def student_edit(request, pk):
         'title': 'Edit Student'
     })
     
-    # account/views.py
 @login_required
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
@@ -112,10 +151,7 @@ def student_delete(request, pk):
         messages.success(request, "Student deleted successfully!")
         return redirect("account:student_list")
     
-    # If someone tries to access via GET, redirect them back
     return redirect("account:student_list")
 
-# account/views.py
 def ajax_update_student_profile_picture(request):
-    # Your logic here
     pass

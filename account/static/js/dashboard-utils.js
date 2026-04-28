@@ -13,7 +13,7 @@ function resetTimer() {
     timeoutTimer = setTimeout(() => {
         // Redirect to logout. Note: Ensure this matches your URL path
         window.location.href = window.location.origin + "/logout/";
-    }, 1000000);
+    }, 600000);
 }
 
 // Initialize listeners for user activity

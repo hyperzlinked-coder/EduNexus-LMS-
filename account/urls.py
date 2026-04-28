@@ -7,7 +7,7 @@ app_name = 'account'
 urlpatterns = [
     # Auth
     path('', views.login_view, name='login'),
-    path('logout/', views.logout_user, name='logout'), 
+    path('logout/', views.logout_view, name='logout'),
     
     # Dashboards
     path('dashboard/student/', views.student_dashboard_view, name='student_dashboard'),
@@ -20,11 +20,12 @@ urlpatterns = [
     path('<uuid:pk>/profile/', views.student_profile, name='student_profile'),
     path('<uuid:pk>/edit/', views.student_edit, name='student_edit'),
     path('<uuid:pk>/delete/', views.student_delete, name='student_delete'),
-    # account/urls.py
-
-   # Change views. to ajax_views.
-    # account/urls.py
+    
+    # User Profile
+    path('my-profile/', views.user_profile_view, name='my_profile'),
+    path('my-profile/update/', views.update_profile_info, name='update_profile_info'),
+    
+    # Ajax
     path("ajax/update-profile-picture/", ajax_views.ajax_update_student_profile_picture, name="ajax_update_student_profile_picture"),
-
 ]
 

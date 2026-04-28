@@ -30,17 +30,37 @@
       </ul>
     </li><!-- End Students Nav -->
 
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#teachers-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-mortarboard"></i><span>Teachers</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="teachers-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <li>
+          <a href="#">
+            <i class="bi bi-circle"></i><span>Add Teachers</span>
+          </a>
+        </li>
+        <li>
+          <a href="3">
+            <i class="bi bi-circle"></i><span>Teachers Directory</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Teachers Nav -->
+
+  
+
     <li class="nav-heading">Pages</li>
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#">
+      <a class="nav-link collapsed" href="{% url 'account:my_profile' %}">
         <i class="bi bi-person"></i>
         <span>Profile</span>
       </a>
     </li><!-- End Profile Page Nav -->
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="#">
+      <a class="nav-link collapsed" href="{% url 'account:logout' %}">
         <i class="bi bi-box-arrow-in-right"></i>
         <span>Logout</span>
       </a>
