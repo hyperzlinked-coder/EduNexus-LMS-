@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>EduNexus</title>
+  <title>EduNexus[LMS]</title>
 
   <link rel="icon" href="{% static 'img/bg.logo.png' %}">
 
@@ -34,14 +34,14 @@
 
 <body>
 
-  {% include 'includes/header.html' %}
-  {% include 'includes/sidebar.html' %}
+  {% include 'layout/header.html' %}
+  {% include 'layout/sidebar.html' %}
 
   <main id="main" class="main">
     {% block content %}{% endblock %}
   </main>
 
-  {% include 'includes/footer.html' %}
+  {% include 'layout/footer.html' %}
 
   <!-- Load Jquery First -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

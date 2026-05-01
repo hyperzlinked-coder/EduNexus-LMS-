@@ -1,39 +1,30 @@
+{% extends 'account/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Teacher Dashboard</title>
 
-    <link rel="icon" type="image/png" href="{% static 'img/bg.logo.png' %}?v=2">
-    
-    <link rel="stylesheet" href="{% static 'css/teacher.css' %}">
-</head>
-<body class="dashboard-body">
-    
-    <header class="dashboard-header">
-        <h1>Makiling School | TEACHER PORTAL</h1>
-        
-        <div class="header-right">
-            <div id="real-time-clock" class="clock-text"></div>
+{% block extra_css %}{% endblock %}
 
-            <div class="user-profile">
-                <div class="user-info">
-                    <span class="user-name">{{ request.user.username }}</span>
-                    <span class="user-role">INSTRUCTOR</span>
+{% block content %}
+<div class="pagetitle">
+    <h1>Teacher Dashboard</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active"><a href="#">Teacher Dashboard</a></li>
+        </ol>
+    </nav>
+    <div class="text-muted small" id="real-time-clock"></div>
+</div>
+
+<section class="section dashboard">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Welcome to EduNexus Dashboard</h5>
+                    <p class="card-text">Manage your students and track their progress efficiently</p>
                 </div>
-                <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=random&color=fff" alt="Profile" class="avatar">
             </div>
         </div>
-    </header>
-
-    <main class="dashboard-main">
-        <h2>Class Management</h2>
-        <div class="dashboard-card">
-            <p>This is the teacher area. Here you can upload modules, input grades, and manage student attendance.</p>
-        </div>
-    </main>
-
-    
-</body>
-    <script src="{% static 'js/dashboard-utils.js' %}"></script>
-</html>
+    </div>
+</section>
+{% endblock %}

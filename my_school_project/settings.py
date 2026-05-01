@@ -148,7 +148,29 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # settings.py
-CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 1209600  # 2 weeks (standard)
+CSRF_COOKIE_HTTPONLY = True  # 2 weeks (standard)
 # This forces the browser to get a new token if the session changes
 CSRF_USE_SESSIONS = True
+# settings.py
+SESSION_COOKIE_AGE = 600  # Session expires after 10 minutes of inactivity
+
+# --- EMAIL CONFIGURATION (GMAIL) ---
+
+# Use the SMTP backend to send real emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Google's SMTP server address
+EMAIL_HOST = 'smtp.gmail.com'
+
+# Port 587 is required for TLS (secure connection)
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Your Gmail address
+EMAIL_HOST_USER = 'hyperzlinked@gmail.com' 
+
+# The 16-character App Password (remove the spaces!)
+EMAIL_HOST_PASSWORD = 'qyfwihkfzokjclcf' 
+
+# The name/email that appears in the 'From' field of the user's inbox
+DEFAULT_FROM_EMAIL = 'School Admin System <hyperzlinked@gmail.com>'

@@ -94,4 +94,22 @@
 
 {% block extra_scripts %}
     <script src="{% static 'js/dashboard-utils.js' %}"></script>
+
+    <script>
+    const firstName = document.querySelector('input[name="first_name"]');
+    const lastName = document.querySelector('input[name="last_name"]');
+    const emailField = document.querySelector('input[name="email"]');
+
+    function updateEmail() {
+        const fName = firstName.value.toLowerCase().replace(/\s/g, '');
+        const lName = lastName.value.toLowerCase().replace(/\s/g, '');
+        if (fName && lName) {
+            emailField.value = fName + lName + "@gmail.com";
+        }
+    }
+
+    firstName.addEventListener('input', updateEmail);
+    lastName.addEventListener('input', updateEmail);
+    </script>
+    
 {% endblock %}

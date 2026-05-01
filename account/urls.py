@@ -27,5 +27,6 @@ urlpatterns = [
     
     # Ajax
     path("ajax/update-profile-picture/", ajax_views.ajax_update_student_profile_picture, name="ajax_update_student_profile_picture"),
+    path('ajax/update-user-photo/', ajax_views.ajax_update_user_profile_picture, name='ajax_update_user_profile_picture'),
 ]
 

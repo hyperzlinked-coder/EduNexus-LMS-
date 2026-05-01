@@ -1,9 +1,12 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 import uuid
 
 # Create your models here.
 class Student(models.Model):
+    # I-add ang field na ito
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='student_profile')
 
     GENDER_CHOICES = (
         ('M', 'Male'),
@@ -33,6 +36,7 @@ class Student(models.Model):
     gender = models.CharField('Gender', max_length=10, choices=GENDER_CHOICES, default='M')
     current_academic_level = models.CharField('Current Academic Level', max_length=10, choices=ACADEMIC_LEVEL_CHOICES)
     enrollment_status = models.CharField('Enrollment Status', max_length=20, choices=ENROLLMENT_STATUS_CHOICES)
+    email = models.EmailField(max_length=254, blank=True, null=True)
     photo = models.ImageField('Photo', upload_to='students/photos', blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -65,6 +69,7 @@ class UserProfile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profiles/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s Profile"

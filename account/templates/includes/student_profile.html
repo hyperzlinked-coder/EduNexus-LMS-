@@ -456,11 +456,12 @@ document.addEventListener('DOMContentLoaded', function(){
                     Swal.showLoading()
                 }
             });
-
+            const csrftoken = "{{ csrf_token }}";
             fetch(updateProfilePictureUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
                 },
                 body: JSON.stringify({
                     student_id: studentId,
@@ -468,44 +469,28 @@ document.addEventListener('DOMContentLoaded', function(){
                 }),
             })
             .then(response => {
-                const contentType = response.headers.get("content-type");
-
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new TypeError("Server didn't return JSON.");
-                }
-
+                // Check if the server actually returned a 200 OK status
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error("Network response was not ok");
                 }
-
                 return response.json();
             })
-            .then((data) => {
-                if (data.success) {
+            .then(data => {
+                if (data.status === "success") {
                     Swal.fire({
-                        title: 'Success',
+                        icon: "success",
+                        title: "Updated!",
                         text: data.message,
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false
                     }).then(() => {
-                        window.location.href = data.redirect_url;
+                        location.reload(); // Refresh to show the new image
                     });
                 } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: data.message || 'Failed to update profile picture.',
-                        icon: 'error',
-                    });
+                    Swal.fire("Error!", data.message, "error");
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error("Error:", error);
-                Swal.fire({
-                    title: 'Error',
-                    text: error.message || 'An unexpected error occurred.',
-                    icon: 'error',
-                });
+                Swal.fire("Error!", "Something went wrong: " + error.message, "error");
             });
 
         });

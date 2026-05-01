@@ -13,9 +13,9 @@ class SchoolLoginForm(AuthenticationForm):
     }))
 
 class StudentForm(forms.ModelForm):
-    
     class Meta:
         model = Student
+        exclude = ['user', 'email']
         fields = [
             'first_name',
             'last_name',

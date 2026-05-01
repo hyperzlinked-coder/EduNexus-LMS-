@@ -1,0 +1,62 @@
+{% load static %}
+
+<aside id="sidebar" class="sidebar">
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      {% if user.is_superuser %}
+        <a class="nav-link" href="{% url 'account:admin_dashboard' %}">
+          <i class="bi bi-grid"></i><span>Admin Dashboard</span>
+        </a>
+      {% elif "Teacher" in user.groups.all|join:"," %}
+        <a class="nav-link" href="{% url 'account:teacher_dashboard' %}">
+          <i class="bi bi-grid"></i><span>Teacher Dashboard</span>
+        </a>
+      {% else %}
+        <a class="nav-link" href="{% url 'account:student_dashboard' %}">
+          <i class="bi bi-grid"></i><span>Student Dashboard</span>
+        </a>
+      {% endif %}
+    </li>
+
+    {% if user.is_superuser or "Teacher" in user.groups.all|join:"," %}
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-people"></i><span>Students</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="students-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        {% if user.is_superuser %}
+          <li><a href="{% url 'account:student_create' %}"><i class="bi bi-circle"></i><span>Add Student</span></a></li>
+        {% endif %}
+        <li><a href="{% url 'account:student_list' %}"><i class="bi bi-circle"></i><span>Students Directory</span></a></li>
+      </ul>
+    </li>
+    {% endif %}
+
+    {% if user.is_superuser %}
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#teachers-nav" data-bs-toggle="collapse" href="#">
+        <i class="bi bi-mortarboard"></i><span>Teachers</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="teachers-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li><a href="#"><i class="bi bi-circle"></i><span>Add Teachers</span></a></li>
+        <li><a href="#"><i class="bi bi-circle"></i><span>Teachers Directory</span></a></li>
+      </ul>
+    </li>
+    {% endif %}
+
+    <li class="nav-heading">Pages</li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'account:my_profile' %}">
+        <i class="bi bi-person"></i><span>Profile</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'account:logout' %}">
+        <i class="bi bi-box-arrow-in-right"></i><span>Logout</span>
+      </a>
+    </li>
+  </ul>
+</aside>

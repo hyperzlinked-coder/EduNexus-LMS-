@@ -1,0 +1,15 @@
+/* Fixes the border between the input and the eye button */
+.input-group .form-control {
+    border-right: none;
+}
+
+.input-group .btn-outline-secondary {
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    color: #6c757d;
+}
+
+.input-group .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    color: #000;
+}

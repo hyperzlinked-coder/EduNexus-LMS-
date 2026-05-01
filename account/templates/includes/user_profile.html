@@ -31,9 +31,9 @@
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                    {% if student.photo %}
-                        <a href="{{ student.photo.url }}" class="image-popup-no-margins">
-                            <img src="{{ student.photo.url }}" alt="{{ student }}" class="rounded-circle shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
+                    {% if user.profile.profile_picture %}
+                        <a href="{{ user.profile.profile_picture.url }}" class="image-popup-no-margins">
+                            <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}" class="rounded-circle shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
                         </a>
                     {% else %}
                         <img src="{% static 'img/student-img.jpg' %}" alt="Default Profile" class="rounded-circle shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
@@ -91,6 +91,9 @@
                         <li class="nav-item">
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
                         </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                        </li>
                         {% if student %}
                         <li class="nav-item">
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#academic-info">Academic Info</button>
@@ -119,12 +122,15 @@
                                 <div class="col-lg-3 col-md-4 label fw-bold">Phone</div>
                                 <div class="col-lg-9 col-md-8">{{ user.profile.phone_number|default:"Not set" }}</div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-3 col-md-4 label fw-bold">Address</div>
+                                <div class="col-lg-9 col-md-8">{{ user.profile.address|default:"Not set" }}</div>
+                            </div>
                         </div>
 
                         <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                             <form method="POST" action="{% url 'account:update_profile_info' %}">
                                 {% csrf_token %}
-                                
                                 <div class="row mb-3">
                                     <label class="col-md-4 col-lg-3 col-form-label">First Name</label>
                                     <div class="col-md-8 col-lg-9">
@@ -145,23 +151,69 @@
                                         <input name="email" type="email" class="form-control" value="{{ request.user.email }}">
                                     </div>
                                 </div>
-
+                                
                                 <div class="row mb-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">Address</label>
+                                    <label for="address" class="col-md-4 col-lg-3 col-form-label">Address</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <input name="address" type="text" class="form-control" value="{{ request.user.profile.address }}">
+                                        <input name="address" type="text" class="form-control" id="address" value="{{ request.user.profile.address|default:'' }}">
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                                    <label for="phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <input name="phone" type="text" class="form-control" value="{{ request.user.profile.phone_number }}">
+                                        <input name="phone" type="text" class="form-control" id="phone" value="{{ request.user.profile.phone_number|default:'' }}">
                                     </div>
                                 </div>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade pt-3" id="profile-change-password">
+                            <form method="POST" action="{% url 'account:update_profile_info' %}">
+                                {% csrf_token %}
+
+                                <div class="row mb-3">
+                                    <label class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="input-group">
+                                            <input name="old_password" type="password" class="form-control pass-input" id="currentPassword" required>
+                                            <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                                <i class="bi bi-eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="input-group">
+                                            <input name="new_password1" type="password" class="form-control pass-input" id="newPassword" required>
+                                            <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                                <i class="bi bi-eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="input-group">
+                                            <input name="new_password2" type="password" class="form-control pass-input" id="renewPassword" required>
+                                            <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                                <i class="bi bi-eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" name="change_password" class="btn btn-primary">Change Password</button>
                                 </div>
                             </form>
                         </div>
@@ -240,8 +292,7 @@ document.addEventListener('DOMContentLoaded', function(){
           browseSection = document.querySelector("#browse-section"),
           imageContainer = document.querySelector("#image-container");
 
-    const updateProfilePictureUrl = "{% url 'account:ajax_update_student_profile_picture' %}";
-    const studentId = "{{ student.id }}";
+    const updateProfilePictureUrl = "{% url 'account:ajax_update_user_profile_picture' %}";
 
     let cropper = null;
 
@@ -336,56 +387,40 @@ document.addEventListener('DOMContentLoaded', function(){
                     Swal.showLoading()
                 }
             });
-
+            const csrftoken = "{{ csrf_token }}";
             fetch(updateProfilePictureUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
                 },
                 body: JSON.stringify({
-                    student_id: studentId,
                     image: imagePreview.src
                 }),
             })
             .then(response => {
-                const contentType = response.headers.get("content-type");
-
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new TypeError("Server didn't return JSON.");
-                }
-
+                // Check if the server actually returned a 200 OK status
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error("Network response was not ok");
                 }
-
                 return response.json();
             })
-            .then((data) => {
-                if (data.success) {
+            .then(data => {
+                if (data.status === "success") {
                     Swal.fire({
-                        title: 'Success',
+                        icon: "success",
+                        title: "Updated!",
                         text: data.message,
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false
                     }).then(() => {
-                        window.location.href = data.redirect_url;
+                        location.reload(); // Refresh to show the new image
                     });
                 } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: data.message || 'Failed to update profile picture.',
-                        icon: 'error',
-                    });
+                    Swal.fire("Error!", data.message, "error");
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error("Error:", error);
-                Swal.fire({
-                    title: 'Error',
-                    text: error.message || 'An unexpected error occurred.',
-                    icon: 'error',
-                });
+                Swal.fire("Error!", "Something went wrong: " + error.message, "error");
             });
 
         });
@@ -439,4 +474,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 });
 </script>
+    <script src="{% static 'js/user-password.js' %}"></script>
+
+    <script src="{% static 'js/magnefic-popup.js' %}"></script>
 {% endblock %}
