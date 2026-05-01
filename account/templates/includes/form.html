@@ -4,44 +4,14 @@
 {% block extra_css %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* This CSS fixes the large vertical gap */
-        .gender-flex-container ul {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 5px 0 10px 0;
-            gap: 25px;
-        }
-
-        .gender-flex-container ul li {
-            display: flex;
-            align-items: center;
-        }
-
-        .gender-flex-container input[type="radio"] {
-            margin-right: 8px;
-            width: 16px;
-            height: 16px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
+        .gender-flex-container ul { display: flex; list-style: none; padding: 0; margin: 5px 0 10px 0; gap: 25px; }
+        .gender-flex-container ul li { display: flex; align-items: center; }
+        .gender-flex-container input[type="radio"] { margin-right: 8px; width: 16px; height: 16px; }
+        .form-group label { font-weight: 600; margin-bottom: 4px; }
     </style>
 {% endblock %}
 
 {% block content %}
-    <div class="pagetitle">
-        <h1>Student Form</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'account:admin_dashboard' %}">Home</a></li>
-                <li class="breadcrumb-item active">Student Form</li>
-            </ol>
-        </nav>
-    </div>
-
     <section class="section">
         <div class="row">
             <div class="col-lg-8">
@@ -57,9 +27,7 @@
                                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                     
                                     {% if field.name == 'gender' %}
-                                        <div class="gender-flex-container">
-                                            {{ field }}
-                                        </div>
+                                        <div class="gender-flex-container">{{ field }}</div>
                                     {% else %}
                                         {{ field }}
                                     {% endif %}
@@ -70,46 +38,27 @@
                                 </div>
                             {% endfor %}
 
-                            <button type="submit" class="btn btn-primary btn-block mt-4">{{ title }}</button>
+                            <button type="submit" class="btn btn-primary btn-block mt-4">Save Student</button>
                         </form>
                     </div>
                 </div>
             </div>
-
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Instructions</h5>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><i class="bi bi-info-circle text-primary"></i> Required fields must be filled</li>
-                            <li class="mb-2"><i class="bi bi-calendar text-primary"></i> Valid birth date required</li>
-                            <li class="mb-2"><i class="bi bi-image text-primary"></i> Photos are optional</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
-        </div>
     </section>
 {% endblock %}
 
 {% block extra_scripts %}
-    <script src="{% static 'js/dashboard-utils.js' %}"></script>
-
     <script>
-    const firstName = document.querySelector('input[name="first_name"]');
-    const lastName = document.querySelector('input[name="last_name"]');
-    const emailField = document.querySelector('input[name="email"]');
-
-    function updateEmail() {
-        const fName = firstName.value.toLowerCase().replace(/\s/g, '');
-        const lName = lastName.value.toLowerCase().replace(/\s/g, '');
-        if (fName && lName) {
-            emailField.value = fName + lName + "@gmail.com";
-        }
-    }
-
-    firstName.addEventListener('input', updateEmail);
-    lastName.addEventListener('input', updateEmail);
+        const emailInput = document.querySelector('input[name="email"]');
+        
+        emailInput.addEventListener('input', function() {
+            // Validation: Check kung nagtatapos sa @gmail.com
+            if (this.value !== "" && !this.value.endsWith('@gmail.com')) {
+                this.style.borderColor = "red";
+                // Maaari mong dagdagan ng error message dito kung gusto mo
+            } else {
+                this.style.borderColor = "#ced4da";
+            }
+        });
     </script>
-    
 {% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('dashboard/student/', views.student_dashboard_view, name='student_dashboard'),
     path('dashboard/teacher/', views.teacher_dashboard_view, name='teacher_dashboard'),
     path('dashboard/admin/', views.admin_dashboard_view, name='admin_dashboard'),
+    path('student/dashboard/', views.student_dashboard_view, name='student_dashboard'),
     
     # Student CRUD
     path("list/", views.student_list, name="student_list"),

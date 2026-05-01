@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,48 @@ INSTALLED_APPS = [
     'account',
     'my_school_project'
 ]
+
+JAZZMIN_SETTINGS = {
+    # Pamagat ng site
+    "site_title": "School Admin",
+    "site_header": "School",
+    "welcome_sign": "Welcome to the School Portal",
+    "site_brand": "Django Administration", # Ito ang lalabas na text
+    
+    # Logo (Ilagay ang logo sa static folder) 
+    "welcome_sign": "Welcome to the School Portal",
+
+    # Dark mode settings
+    "theme": "default",
+    "dark_mode_theme": "darkly", # I-set ito para sa dark mode
+}
+
+# Siguraduhin na ang JAZZMIN_UI_TWEAKS ay nandito rin para sa UI behavior
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-dark",
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "default_theme": "flatly",
+    "theme": "flatly",
+    "dark_mode_theme": "darkly", # Ito ang dahilan ng warning
+    "default_theme_mode": "auto", 
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -127,6 +170,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Burahin ang session kapag isinara ang browser tab/window
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
