@@ -1,31 +1,178 @@
 {% extends 'account/base.html' %}
 {% load static %}
 
-{% block extra_css %}{% endblock %}
+{% block extra_css %}
+<style>
+    /* Modern SaaS Styling */
+    .stat-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 12px;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .icon-shape {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .badge-soft-success {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border-radius: 8px;
+        padding: 5px 12px;
+    }
+    .table thead th {
+        background-color: #f8f9fa;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        color: #6c757d;
+        border: none;
+    }
+    .welcome-banner {
+        background: linear-gradient(45deg, #1a4a2e, #28a745);
+        color: white;
+        border-radius: 15px;
+    }
+    .student-avatar {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="pagetitle">
-    <h1>Admin Dashboard</h1>
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active"><a href="#">Admin Dashboard</a></li>
-        </ol>
-    </nav>
-    <div class="text-muted small" id="real-time-clock"></div>
-</div>
-
-<section class="section dashboard">
-    <div class="row">
+<div class="container-fluid py-4">
+    
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Welcome to EduNexus Dashboard</h5>
-                    <p class="card-text">Manage your students and track their progress efficiently</p>
+            <div class="welcome-banner p-4 shadow-sm d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold mb-1">Welcome back, Admin!</h2>
+                    <p class="mb-0 opacity-75">Makiling Integrated School • EduNexus LMS</p>
+                </div>
+                <div class="d-none d-md-block">
+                    <a href="{% url 'account:student_create' %}" class="btn btn-light text-success fw-bold me-2">
+                        <i class="bi bi-plus-circle me-1"></i> Add Student
+                    </a>
+                    <a href="{% url 'account:teacher_create' %}" class="btn btn-outline-light fw-bold">
+                        <i class="bi bi-person-plus me-1"></i> Add Teacher
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-</section>
-{% endblock %}
 
+    <div class="row mb-4">
+        <div class="col-md-6 col-xl-4 mb-4 mb-xl-0">
+            <div class="card stat-card border-0 shadow-sm p-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted small text-uppercase fw-bold mb-1">Total Students</p>
+                            <h2 class="fw-bold mb-0">{{ student_count }}</h2>
+                        </div>
+                        <div class="icon-shape bg-light-success rounded-3 text-success fs-3">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <a href="{% url 'account:student_list' %}" class="text-decoration-none small d-flex align-items-center text-success">
+                        View active records <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-4 mb-4 mb-xl-0">
+            <div class="card stat-card border-0 shadow-sm p-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted small text-uppercase fw-bold mb-1">Total Faculty</p>
+                            <h2 class="fw-bold mb-0">{{ teacher_count }}</h2>
+                        </div>
+                        <div class="icon-shape bg-light-primary rounded-3 text-primary fs-3">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <a href="{% url 'account:teacher_list' %}" class="text-decoration-none small d-flex align-items-center text-primary">
+                        Manage faculty list <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2"></i>Recently Enrolled</h5>
+                    <a href="{% url 'account:student_list' %}" class="btn btn-sm btn-light border text-muted px-3">View All Students</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Student Name</th>
+                                <th>Grade Level</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in recent_students %}
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            {% if student.photo %}
+                                                <img src="{{ student.photo.url }}?t={{ student.updated_at.timestamp }}" 
+                                                    class="rounded-circle me-3" 
+                                                    style="width: 40px; height: 40px; object-fit: cover;">
+                                            {% else %}
+                                                <img src="https://ui-avatars.com/api/?name={{ student.first_name }}+{{ student.last_name }}&background=e8f5e9&color=2e7d32" class="student-avatar" alt="Default">
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{ student.first_name }} {{ student.last_name }}</div>
+                                            <div class="small text-muted">ID: #{{ student.id|add:1000 }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">{{ student.academic_level }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge-soft-success small fw-bold">
+                                        <i class="bi bi-check-circle-fill me-1"></i> {{ student.enrollment_status|title }}
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a href="{% url 'account:student_profile' student.pk %}" class="btn btn-sm btn-outline-dark rounded-pill px-3">
+                                        Profile
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No students enrolled yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

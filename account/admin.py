@@ -1,16 +1,24 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from .models import AdminProfile  # Import your model
 
-# I-unregister ang default User para mapalitan natin
+# 1. Create the Inline class
+class AdminProfileInline(admin.StackedInline):
+    model = AdminProfile
+    can_delete = False
+    verbose_name_plural = 'Student Profile Information'
+    fk_name = 'user'
+
+# I-unregister ang default User
 admin.site.unregister(User)
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    # Ipakita ang group sa listahan
-    list_display = ('username', 'email', 'first_name', 'last_name', 'get_groups')
+    # 2. Add the inline here
+    inlines = (AdminProfileInline, )
     
-    # Ito ang maglalagay ng "By groups" sa sidebar (tamang-tama sa request mo!)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'get_groups')
     list_filter = ('groups', 'is_staff', 'is_superuser')
 
     def get_groups(self, obj):

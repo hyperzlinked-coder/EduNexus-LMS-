@@ -36,11 +36,12 @@ class StudentForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter First Name'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Last Name'}),
             'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'gender': forms.RadioSelect(attrs={'class': 'form-check-input'}), # Ginawang standard bootstrap class
-            'current_academic_level': forms.Select(attrs={'class': 'form-select'}),
-            'enrollment_status': forms.Select(attrs={'class': 'form-select'}),
-            'photo': forms.FileInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@gmail.com'}),
+            'gender': forms.RadioSelect(), # Let the template handle the flex styling
+            'current_academic_level': forms.Select(attrs={'class': 'form-control'}), # Changed from form-select
+            'enrollment_status': forms.Select(attrs={'class': 'form-control'}),     # Changed from form-select
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+            
         }
 
     def clean_email(self):
@@ -48,15 +49,34 @@ class StudentForm(forms.ModelForm):
         if email and not email.endswith('@gmail.com'):
             raise forms.ValidationError("Ang system ay tumatanggap lamang ng @gmail.com accounts.")
         return email
-    
 
-class TeacherRegistrationForm(forms.ModelForm):
+# forms.py
+class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['teacher_id', 'department', 'phone_number', 'photo']
+        fields = [
+            'first_name', 'last_name', 'email', 'preferred_subject',
+            'department', 'phone_number', 'photo' , 'gender', 'birth_date',
+        ]
         widgets = {
-            'teacher_id': forms.TextInput(attrs={'class': 'form-control'}),
-            'department': forms.TextInput(attrs={'class': 'form-control'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Last Name'}),
+            'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'teacher@gmail.com'}),
+            'gender': forms.RadioSelect(), # Let the template handle the flex styling
+            
+            'department': forms.Select(attrs={'class': 'form-select'}),
+            'preferred_subject': forms.Select(attrs={'class': 'form-select'}),
+            'phone_number': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'id': 'phone',  # Critical: we use this ID for the JavaScript
+                'placeholder': '912 345 6789'
+            }),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
         }
+        
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and not email.endswith('@gmail.com'):
+            raise forms.ValidationError("Ang system ay tumatanggap lamang ng @gmail.com accounts.")
+        return email

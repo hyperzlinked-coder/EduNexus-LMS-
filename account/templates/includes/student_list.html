@@ -63,21 +63,20 @@
                                 {% for student in students %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
-                                    <td>
+                                    <td class="ps-4">
                                         <div class="d-flex align-items-center">
                                             {% if student.photo %}
-                                                <img src="{{ student.photo.url }}" alt="{{ student }}" class="student-photo"/>
+                                                <img src="{{ student.photo.url }}?t={{ student.updated_at.timestamp }}"
+                                                    class="rounded-circle me-3" 
+                                                    style="width: 40px; height: 40px; object-fit: cover;">
                                             {% else %}
-                                                <img src="{% static 'img/student-img.jpg' %}" alt="Default Profile" class="student-photo"/>
+                                                <img src="https://ui-avatars.com/api/?name={{ student.user.first_name }}+{{ student.user.last_name }}&background=e8f5e9&color=2e7d32" 
+                                                class="rounded-circle me-3"  
+                                                style="width: 40px; height: 40px; object-fit: cover;">
+                                            
                                             {% endif %}
-
-                                            <div class="ms-3">
-                                                <h6 class="mb-0">
-                                                    {{ student.first_name }} {{ student.last_name }}
-                                                </h6>
-                                            </div>
+                                            <div>{{ student.first_name }} {{ student.last_name }}</div>
                                         </div>
-                                        
                                     </td>
                                     <td>{{ student.get_gender_display }}</td>
                                     <td>{{ student.get_current_academic_level_display }}</td>

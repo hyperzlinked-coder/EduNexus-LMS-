@@ -34,8 +34,14 @@
                 <div class="form-group">
                     {{ form.username }}
                 </div>
+                
                 <div class="form-group">
-                    {{ form.password }}
+                    <div class="input-group" style="position: relative; display: flex; align-items: center;">
+                        {{ form.password }}
+                        <span class="toggle-password" style="cursor: pointer; position: absolute; right: 15px; z-index: 10;">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
                 </div>
                 
                 <div class="attempts-text" style="margin: 10px 0; font-size: 0.9rem; color: #666;">
@@ -56,8 +62,7 @@
     </div>
 </body>
 
-    {% block extra_scripts %}
-        <script src="{% static 'js/user-password.js' %}"></script>
-    {% endblock %}
-    
 </html>
+{% block extra_scripts %}
+        <script src="{% static 'js/user-password.js' %}"></script>
+{% endblock %}

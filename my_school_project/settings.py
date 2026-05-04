@@ -170,7 +170,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Burahin ang session kapag isinara ang browser tab/window
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -182,10 +181,6 @@ SESSION_COOKIE_AGE = 3600
 # Para siguradong ma-update ang session sa bawat request
 SESSION_SAVE_EVERY_REQUEST = True
 
-
-LOGIN_URL = 'account:login'
-LOGIN_REDIRECT_URL = 'account:student_dashboard'
-LOGOUT_REDIRECT_URL = 'account:login'
 
 
 MEDIA_URL = '/media/'

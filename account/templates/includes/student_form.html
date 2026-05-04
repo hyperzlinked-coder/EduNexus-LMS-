@@ -1,0 +1,171 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Fix for the Radio Button List layout */
+        .gender-flex-container ul { 
+            display: flex; 
+            list-style: none; 
+            padding: 0; 
+            margin: 10px 0 5px 0; 
+            gap: 40px; /* Increased gap for better spacing */
+            flex-wrap: wrap; 
+        }
+
+        .gender-flex-container ul li { 
+            display: flex; 
+            align-items: center; 
+        }
+
+        .gender-flex-container input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Fix for the Label overlapping and vertical alignment */
+        .form-group label { 
+            display: block; 
+            width: 100%;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        /* Standardize input appearance */
+        .form-control, .form-select {
+            border-radius: 6px;
+            padding: 12px 15px;
+            height: auto; /* Ensures padding defines the height */
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #012970;
+            margin-bottom: 25px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="section">
+    <div class="row">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-1"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title">{{ title }}</h5>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %} 
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="{% if field.name == 'first_name' or field.name == 'last_name' %}col-md-6{% else %}col-12{% endif %} mb-4">
+                                    <div class="form-group">
+                                        <label for="{{ field.id_for_label }}">
+                                            {{ field.label }} 
+                                            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                                        </label>
+
+                                        {% if field.name == 'gender' %}
+                                            <div class="gender-flex-container {% if field.errors %}is-invalid-container{% endif %}">
+                                                {{ field }}
+                                            </div>
+                                        {% else %}
+                                            {{ field }}
+                                        {% endif %}
+
+                                        {% if field.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {% for error in field.errors %}
+                                                    <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="text-center mt-2">
+                            <button type="submit" class="btn btn-primary px-5">Save Student</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0" style="background-color: #f8f9fa;">
+                <div class="card-body p-4">
+                    <h5 class="card-title" style="font-size: 1.1rem; color: #012970;">Instructions</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="bi bi-info-circle text-primary mr-2"></i> 
+                            Fill in all required fields marked with *
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-calendar-event text-primary mr-2"></i> 
+                            Birth date must be in the past
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-image text-primary mr-2"></i> 
+                            Photo is optional but recommended
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-shield-check text-primary mr-2"></i> 
+                            All information is kept confidential
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div> 
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.querySelector('input[name="email"]');
+            
+            if (emailInput) {
+                emailInput.addEventListener('input', function() {
+                    // Real-time Gmail validation
+                    if (this.value !== "" && !this.value.toLowerCase().endsWith('@gmail.com')) {
+                        this.style.borderColor = "#dc3545"; // Bootstrap Danger Red
+                    } else {
+                        this.style.borderColor = "#ced4da";
+                    }
+                });
+            }
+        });
+    </script>
+    
+{% endblock %}

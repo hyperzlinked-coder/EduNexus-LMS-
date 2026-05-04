@@ -13,3 +13,8 @@
     background-color: #f8f9fa;
     color: #000;
 }
+/* Hide the default Edge/Chrome eye icon */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}

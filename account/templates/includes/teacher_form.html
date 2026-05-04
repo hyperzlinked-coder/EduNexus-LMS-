@@ -1,0 +1,135 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/css/intlTelInput.css">
+
+    <style>
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #444; }
+        .form-control { border-radius: 6px; padding: 12px 15px; height: auto; }
+        .card-title { font-weight: 700; color: #012970; margin-bottom: 25px; }
+        .iti { width: 100%; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="row">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-1"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}    
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title">Add New Teacher</h5>
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %} 
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="{% if field.name == 'first_name' or field.name == 'last_name' %}col-md-6{% else %}col-12{% endif %} mb-4">
+                                    <div class="form-group">
+                                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {% if field.name == 'gender' %}
+                                            <div class="gender-flex-container">{{ field }}</div>
+                                        {% else %}
+                                            {{ field }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-2">
+                            <button type="submit" class="btn btn-primary px-5">Save Teacher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 sticky-top" style="top: 20px; height: fit-content; z-index: 99;">
+            <div class="card shadow-sm border-0" style="background-color: #f0f4f8;">
+                <div class="card-body p-4">
+                    <h5 class="card-title" style="font-size: 1.1rem;">Teacher Requirements</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="bi bi-person-badge text-success mr-2"></i> 
+                            Assign the correct department for scheduling.
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-envelope-at text-success mr-2"></i> 
+                            Use an official @gmail.com or school email.
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-camera text-success mr-2"></i> 
+                            Upload a professional 2x2 ID photo.
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-check-all text-success mr-2"></i> 
+                            Ensure all credentials are verified.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deptField = document.querySelector('#id_department'); // Check your actual ID in Inspect Element
+    const subjectField = document.querySelector('#id_preferred_subject');
+    const allOptions = Array.from(subjectField.options);
+
+    function forceSubjectChoice() {
+        const selectedDept = deptField.value; // Will be 'JHS' or 'SHS'
+        
+        // Reset the subject dropdown
+        subjectField.innerHTML = '';
+        
+        // Add a default "Please select" option
+        const placeholder = document.createElement('option');
+        placeholder.textContent = "-- Select Subject --";
+        placeholder.value = "";
+        subjectField.appendChild(placeholder);
+
+        allOptions.forEach(option => {
+            // If Dept is SHS, only show subjects starting with 'SHS-'
+            if (selectedDept === 'SHS' && option.value.startsWith('SHS-')) {
+                subjectField.appendChild(option);
+            } 
+            // If Dept is JHS, only show subjects starting with 'JHS-'
+            else if (selectedDept === 'JHS' && option.value.startsWith('JHS-')) {
+                subjectField.appendChild(option);
+            }
+        });
+    }
+
+    // Listen for changes
+    deptField.addEventListener('change', forceSubjectChoice);
+    
+    // Run once on load to set initial state
+    forceSubjectChoice();
+});
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/intlTelInput.min.js"></script>
+    <script>
+        const input = document.querySelector("#phone");
+        const iti = window.intlTelInput(input, {
+            initialCountry: "ph", // Set default to Philippines
+            separateDialCode: true, // Show the +63 outside the text box
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/utils.js",
+        });
+
+        // Optional: Before submitting the form, you can get the full number 
+        // with the dial code using iti.getNumber()
+    </script>
+{% endblock %}

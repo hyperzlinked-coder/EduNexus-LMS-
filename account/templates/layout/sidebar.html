@@ -21,10 +21,10 @@
 
     {% if user.is_superuser or "Teacher" in user.groups.all|join:"," %}
     <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#students-nav" data-bs-toggle="collapse" href="#">
+      <a class="nav-link collapsed" data-bs-target="#teachers-nav" data-bs-toggle="collapse" href="#">
         <i class="bi bi-people"></i><span>Students</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
-      <ul id="students-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+      <ul id="teachers-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         {% if user.is_superuser %}
           <li><a href="{% url 'account:student_create' %}"><i class="bi bi-circle"></i><span>Add Student</span></a></li>
         {% endif %}
@@ -39,8 +39,8 @@
         <i class="bi bi-mortarboard"></i><span>Teachers</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="teachers-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-        <li><a href="#"><i class="bi bi-circle"></i><span>Add Teachers</span></a></li>
-        <li><a href="#"><i class="bi bi-circle"></i><span>Teachers Directory</span></a></li>
+        <li><a href="{% url 'account:teacher_create' %}"><i class="bi bi-circle"></i><span>Add Teachers</span></a></li>
+        <li><a href="{% url 'account:teacher_list' %}"><i class="bi bi-circle"></i><span>Teachers Directory</span></a></li>
       </ul>
     </li>
     {% endif %}
@@ -48,9 +48,22 @@
     <li class="nav-heading">Pages</li>
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="{% url 'account:my_profile' %}">
-        <i class="bi bi-person"></i><span>Profile</span>
-      </a>
+        {% if request.user.is_superuser %}
+            <a class="nav-link collapsed" href="{% url 'account:admin_profile' %}">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        {% elif request.user.teacher_profile %}
+            <a class="nav-link collapsed" href="{% url 'account:teacher_profile' request.user.teacher_profile.pk %}">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        {% elif request.user.student_profile %}
+            <a class="nav-link collapsed" href="{% url 'account:student_profile' request.user.student_profile.pk %}">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        {% endif %}
     </li>
 
     <li class="nav-item">
